@@ -1,25 +1,21 @@
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
 
-namespace aplabs_burova.Controllers
+[Route("[controller]")]
+[ApiController]
+public class WeatherForecastController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    private readonly IRepositoryManager _repository;
+    public WeatherForecastController(IRepositoryManager repository)
     {
-        private readonly ILoggerManager _logger;
-        public WeatherForecastController(ILoggerManager logger)
-        {
-            _logger = logger;
-        }
+        _repository = repository;
+    }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            //_repository.Company.AnyMethodFromCompanyRepository();
-            //_repository.Employee.AnyMethodFromEmployeeRepository();
-            return new string[] { "value1", "value2" };
-        }
-
+ [HttpGet]
+    public ActionResult<IEnumerable<string>> Get()
+    {
+        //_repository.Company.AnyMethodFromCompanyRepository();
+        //_repository.Employee.AnyMethodFromEmployeeRepository();
+        return new string[] { "value1", "value2" };
     }
 }

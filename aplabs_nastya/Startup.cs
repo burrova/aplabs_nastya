@@ -20,8 +20,8 @@ public class Startup
         services.ConfigureCors();
         services.ConfigureIISIntegration();
         services.ConfigureLoggerService();
-        //services.ConfigureSqlContext(Configuration);
-        //services.ConfigureRepositoryManager();
+        services.ConfigureSqlContext(Configuration);
+        services.ConfigureRepositoryManager();
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
