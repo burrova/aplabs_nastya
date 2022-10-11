@@ -13,6 +13,8 @@ namespace Repository
         private RepositoryContext _repositoryContext;
         private ICompanyRepository _companyRepository;
         private IEmployeeRepository _employeeRepository;
+        private ICarRepository _carRepository;
+        private IClientRepository _clientRepository;
         public RepositoryManager(RepositoryContext repositoryContext)
         {
             _repositoryContext = repositoryContext;
@@ -33,6 +35,24 @@ namespace Repository
             if (_employeeRepository == null)
                     _employeeRepository = new EmployeeRepository(_repositoryContext);
                 return _employeeRepository;
+            }
+        }
+        public IClientRepository Client
+        {
+            get
+            {
+                if (_clientRepository == null)
+                    _clientRepository = new ClientRepository(_repositoryContext);
+                return _clientRepository;
+            }
+        }
+        public ICarRepository Car
+        {
+            get
+            {
+                if (_carRepository == null)
+                    _carRepository = new CarRepository(_repositoryContext);
+                return _carRepository;
             }
         }
         public void Save() => _repositoryContext.SaveChanges();
