@@ -16,6 +16,10 @@ namespace aplabs_nastya
             CreateMap<Employee, EmployeeDto>();
             CreateMap<Client, ClientDto>();
             CreateMap<Car, CarDto>();
+            CreateMap<CompanyForCreationDto, Company>();
+            CreateMap<ClientForCreationDto, Client>();
+            CreateMap<CarForCreationDto, Car>();
+            CreateMap<EmployeeForCreationDto, Employee>();
         }
     }
 }

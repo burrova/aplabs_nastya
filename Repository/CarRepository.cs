@@ -21,6 +21,9 @@ namespace Repository
         .OrderBy(c => c.Name)
         .ToList();
         public Car GetCar(Guid carId, bool trackChanges) => FindByCondition(c
-=> c.Id.Equals(carId), trackChanges).SingleOrDefault();
+        => c.Id.Equals(carId), trackChanges).SingleOrDefault();
+        public void CreateCar(Car car) => Create(car);
+        public IEnumerable<Car> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
+        FindByCondition(x => ids.Contains(x.Id), trackChanges).ToList();
     }
 }

@@ -11,5 +11,7 @@ namespace Contracts
     {
         IEnumerable<Car> GetAllCars(bool trackChanges);
         Car GetCar(Guid carId, bool trackChanges);
+        void CreateCar(Car car);
+        IEnumerable<Car> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
     }
 }

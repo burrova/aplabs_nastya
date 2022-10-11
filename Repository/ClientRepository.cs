@@ -23,5 +23,9 @@ namespace Repository
 
         public Client GetClient(Guid clientId, bool trackChanges) => FindByCondition(c
         => c.Id.Equals(clientId), trackChanges).SingleOrDefault();
+
+        public void CreateClient(Client client) => Create(client);
+        public IEnumerable<Client> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
+FindByCondition(x => ids.Contains(x.Id), trackChanges).ToList();
     }
 }
