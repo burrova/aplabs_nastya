@@ -20,5 +20,7 @@ namespace Repository
         FindAll(trackChanges)
         .OrderBy(c => c.Name)
         .ToList();
+        public Car GetCar(Guid carId, bool trackChanges) => FindByCondition(c
+=> c.Id.Equals(carId), trackChanges).SingleOrDefault();
     }
 }

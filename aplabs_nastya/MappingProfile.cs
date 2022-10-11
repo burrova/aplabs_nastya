@@ -13,7 +13,9 @@ namespace aplabs_nastya
             opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
 
             CreateMap<Car, CarDto>();
-
+            CreateMap<Employee, EmployeeDto>();
+            CreateMap<Client, ClientDto>();
+            CreateMap<Car, CarDto>();
         }
     }
 }

@@ -10,5 +10,6 @@ namespace Contracts
     public interface ICarRepository
     {
         IEnumerable<Car> GetAllCars(bool trackChanges);
+        Car GetCar(Guid carId, bool trackChanges);
     }
 }
