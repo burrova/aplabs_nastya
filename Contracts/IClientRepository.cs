@@ -13,5 +13,6 @@ namespace Contracts
         Client GetClient(Guid clientId, bool trackChanges);
         void CreateClient(Client client);
         IEnumerable<Client> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+        void DeleteClient(Client client);
     }
 }

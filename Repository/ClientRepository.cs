@@ -27,5 +27,9 @@ namespace Repository
         public void CreateClient(Client client) => Create(client);
         public IEnumerable<Client> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
 FindByCondition(x => ids.Contains(x.Id), trackChanges).ToList();
+        public void DeleteClient(Client client)
+        {
+            Delete(client);
+        }
     }
 }

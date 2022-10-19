@@ -25,5 +25,9 @@ namespace Repository
         public void CreateCar(Car car) => Create(car);
         public IEnumerable<Car> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
         FindByCondition(x => ids.Contains(x.Id), trackChanges).ToList();
+        public void DeleteCar(Car car)
+        {
+            Delete(car);
+        }
     }
 }

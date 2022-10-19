@@ -4,6 +4,7 @@ using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aplabs_nastya.Controllers
@@ -102,6 +103,61 @@ namespace aplabs_nastya.Controllers
             var ids = string.Join(",", carCollectionToReturn.Select(c => c.Id));
             return CreatedAtRoute("CarCollection", new { ids },
             carCollectionToReturn);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteClient(Guid id)
+        {
+            var client = _repository.Client.GetClient(id, trackChanges: false);
+            if (client == null)
+            {
+                _logger.LogInfo($"Client with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+            _repository.Client.DeleteClient(client);
+            _repository.Save();
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateCar(Guid id, [FromBody] CarForUpdateDto car)
+        {
+            if (car == null)
+            {
+                _logger.LogError("CarForUpdateDto object sent from client is null.");
+                return BadRequest("CarForUpdateDto object is null");
+            }
+            var carEntity = _repository.Car.GetCar(id, trackChanges: true);
+            if (carEntity == null)
+            {
+                _logger.LogInfo($"Car with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+            _mapper.Map(car, carEntity);
+            _repository.Save();
+            return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult PartiallyUpdateCar(Guid id,
+        [FromBody] JsonPatchDocument<CarForUpdateDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                _logger.LogError("patchDoc object sent from client is null.");
+                return BadRequest("patchDoc object is null");
+            }
+            var carEntity = _repository.Car.GetCar(id, trackChanges: true);
+            if (carEntity == null)
+            {
+                _logger.LogInfo($"Car with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+            var carToPatch = _mapper.Map<CarForUpdateDto>(carEntity);
+            patchDoc.ApplyTo(carToPatch);
+            _mapper.Map(carToPatch, carEntity);
+            _repository.Save();
+            return NoContent();
         }
     }
 }
