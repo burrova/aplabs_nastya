@@ -24,17 +24,17 @@ namespace aplabs_nastya.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult GetCars()
+        public async Task<IActionResult> GetCars()
         {
-            var cars = _repository.Car.GetAllCars(trackChanges: false);
+            var cars = await _repository.Car.GetAllCarsAsync(trackChanges: false);
             var carsDto = _mapper.Map<IEnumerable<CarDto>>(cars);
             return Ok(carsDto);
         }
 
         [HttpGet("{id}", Name = "CarById")]
-        public IActionResult GetCar(Guid id)
+        public async Task<IActionResult> GetCar(Guid id)
         {
-            var car = _repository.Car.GetCar(id, trackChanges: false);
+            var car = await _repository.Car.GetCarAsync(id, trackChanges: false);
             if (car == null)
             {
                 _logger.LogInfo($"Car with id: {id} doesn't exist in the database.");
@@ -48,7 +48,7 @@ namespace aplabs_nastya.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCar([FromBody] CarForCreationDto car)
+        public async Task<IActionResult> CreateCar([FromBody] CarForCreationDto car)
         {
             if (car == null)
             {
@@ -57,14 +57,14 @@ namespace aplabs_nastya.Controllers
             }
             var carEntity = _mapper.Map<Car>(car);
             _repository.Car.CreateCar(carEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             var carToReturn = _mapper.Map<CarDto>(carEntity);
             return CreatedAtRoute("CarById", new { id = carToReturn.Id },
             carToReturn);
         }
 
         [HttpGet("collection/({ids})", Name = "CarCollection")]
-        public IActionResult GetCarCollection([ModelBinder(BinderType =
+        public async Task<IActionResult> GetCarCollection([ModelBinder(BinderType =
         typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
             if (ids == null)
@@ -72,7 +72,7 @@ namespace aplabs_nastya.Controllers
                 _logger.LogError("Parameter ids is null");
                 return BadRequest("Parameter ids is null");
             }
-            var carEntities = _repository.Car.GetByIds(ids, trackChanges: false);
+            var carEntities = await _repository.Car.GetByIdsAsync(ids, trackChanges: false);
             if (ids.Count() != carEntities.Count())
             {
                 _logger.LogError("Some ids are not valid in a collection");
@@ -84,7 +84,7 @@ namespace aplabs_nastya.Controllers
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateCarCollection([FromBody]
+        public async Task<IActionResult> CreateCarCollection([FromBody]
         IEnumerable<CarForCreationDto> carCollection)
         {
             if (carCollection == null)
@@ -97,7 +97,7 @@ namespace aplabs_nastya.Controllers
             {
                 _repository.Car.CreateCar(car);
             }
-            _repository.Save();
+            await _repository.SaveAsync();
             var carCollectionToReturn =
             _mapper.Map<IEnumerable<CarDto>>(carEntities);
             var ids = string.Join(",", carCollectionToReturn.Select(c => c.Id));
@@ -106,40 +106,40 @@ namespace aplabs_nastya.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteClient(Guid id)
+        public async Task<IActionResult> DeleteClient(Guid id)
         {
-            var client = _repository.Client.GetClient(id, trackChanges: false);
+            var client = await _repository.Client.GetClientAsync(id, trackChanges: false);
             if (client == null)
             {
                 _logger.LogInfo($"Client with id: {id} doesn't exist in the database.");
                 return NotFound();
             }
             _repository.Client.DeleteClient(client);
-            _repository.Save();
+            await _repository.SaveAsync();
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCar(Guid id, [FromBody] CarForUpdateDto car)
+        public async Task<IActionResult> UpdateCar(Guid id, [FromBody] CarForUpdateDto car)
         {
             if (car == null)
             {
                 _logger.LogError("CarForUpdateDto object sent from client is null.");
                 return BadRequest("CarForUpdateDto object is null");
             }
-            var carEntity = _repository.Car.GetCar(id, trackChanges: true);
+            var carEntity = await _repository.Car.GetCarAsync(id, trackChanges: true);
             if (carEntity == null)
             {
                 _logger.LogInfo($"Car with id: {id} doesn't exist in the database.");
                 return NotFound();
             }
             _mapper.Map(car, carEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             return NoContent();
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PartiallyUpdateCar(Guid id,
+        public async Task<IActionResult> PartiallyUpdateCar(Guid id,
         [FromBody] JsonPatchDocument<CarForUpdateDto> patchDoc)
         {
             if (patchDoc == null)
@@ -147,7 +147,7 @@ namespace aplabs_nastya.Controllers
                 _logger.LogError("patchDoc object sent from client is null.");
                 return BadRequest("patchDoc object is null");
             }
-            var carEntity = _repository.Car.GetCar(id, trackChanges: true);
+            var carEntity = await _repository.Car.GetCarAsync(id, trackChanges: true);
             if (carEntity == null)
             {
                 _logger.LogInfo($"Car with id: {id} doesn't exist in the database.");
@@ -156,7 +156,7 @@ namespace aplabs_nastya.Controllers
             var carToPatch = _mapper.Map<CarForUpdateDto>(carEntity);
             patchDoc.ApplyTo(carToPatch);
             _mapper.Map(carToPatch, carEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             return NoContent();
         }
     }

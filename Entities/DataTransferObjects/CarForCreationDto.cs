@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
-    public class CarForCreationDto
+    public class CarForCreationDto : CarForManipulationDto
     {
         public string Brand { get; set; }
         public string Name { get; set; }

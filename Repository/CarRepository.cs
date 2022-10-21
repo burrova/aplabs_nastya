@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -16,15 +17,15 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Car> GetAllCars(bool trackChanges) =>
-        FindAll(trackChanges)
+        public async Task<IEnumerable<Car>> GetAllCarsAsync(bool trackChanges) =>
+        await FindAll(trackChanges)
         .OrderBy(c => c.Name)
-        .ToList();
-        public Car GetCar(Guid carId, bool trackChanges) => FindByCondition(c
-        => c.Id.Equals(carId), trackChanges).SingleOrDefault();
+        .ToListAsync();
+        public async Task<Car> GetCarAsync(Guid carId, bool trackChanges) => await FindByCondition(c
+        => c.Id.Equals(carId), trackChanges).SingleOrDefaultAsync();
         public void CreateCar(Car car) => Create(car);
-        public IEnumerable<Car> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
-        FindByCondition(x => ids.Contains(x.Id), trackChanges).ToList();
+        public async Task<IEnumerable<Car>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
+        await FindByCondition(x => ids.Contains(x.Id), trackChanges).ToListAsync();
         public void DeleteCar(Car car)
         {
             Delete(car);

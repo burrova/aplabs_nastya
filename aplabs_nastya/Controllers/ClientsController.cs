@@ -24,16 +24,16 @@ namespace aplabs_nastya.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult GetClients()
+        public async Task<IActionResult> GetClients()
         {
-            var clients = _repository.Client.GetAllClients(trackChanges: false);
+            var clients = await _repository.Client.GetAllClientsAsync(trackChanges: false);
             var clientsDto = _mapper.Map<IEnumerable<ClientDto>>(clients);
             return Ok(clientsDto);
         }
         [HttpGet("{id}", Name = "ClientById")]
-        public IActionResult GetClient(Guid id)
+        public async Task<IActionResult> GetClientAsync(Guid id)
         {
-            var client = _repository.Client.GetClient(id, trackChanges: false);
+            var client = await _repository.Client.GetClientAsync(id, trackChanges: false);
             if (client == null)
             {
                 _logger.LogInfo($"Client with id: {id} doesn't exist in the database.");
@@ -47,7 +47,7 @@ namespace aplabs_nastya.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateClient([FromBody] ClientForCreationDto client)
+        public async Task<IActionResult> CreateClient([FromBody] ClientForCreationDto client)
         {
             if (client == null)
             {
@@ -56,14 +56,14 @@ namespace aplabs_nastya.Controllers
             }
             var clientEntity = _mapper.Map<Client>(client);
             _repository.Client.CreateClient(clientEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             var clientToReturn = _mapper.Map<ClientDto>(clientEntity);
             return CreatedAtRoute("ClientById", new { id = clientToReturn.Id },
             clientToReturn);
         }
 
         [HttpGet("collection/({ids})", Name = "ClientCollection")]
-        public IActionResult GetClientCollection([ModelBinder(BinderType =
+        public async Task<IActionResult> GetClientCollection([ModelBinder(BinderType =
         typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
             if (ids == null)
@@ -71,7 +71,7 @@ namespace aplabs_nastya.Controllers
                 _logger.LogError("Parameter ids is null");
                 return BadRequest("Parameter ids is null");
             }
-            var clientEntities = _repository.Client.GetByIds(ids, trackChanges: false);
+            var clientEntities = await _repository.Client.GetByIdsAsync(ids, trackChanges: false);
             if (ids.Count() != clientEntities.Count())
             {
                 _logger.LogError("Some ids are not valid in a collection");
@@ -83,7 +83,7 @@ namespace aplabs_nastya.Controllers
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateClientCollection([FromBody]
+        public async Task<IActionResult> CreateClientCollection([FromBody]
         IEnumerable<ClientForCreationDto> clientCollection)
         {
             if (clientCollection == null)
@@ -96,7 +96,7 @@ namespace aplabs_nastya.Controllers
             {
                 _repository.Client.CreateClient(client);
             }
-            _repository.Save();
+            await _repository.SaveAsync();
             var clientCollectionToReturn =
             _mapper.Map<IEnumerable<ClientDto>>(clientEntities);
             var ids = string.Join(",", clientCollectionToReturn.Select(c => c.Id));
@@ -105,40 +105,40 @@ namespace aplabs_nastya.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteClient(Guid id)
+        public async Task<IActionResult> DeleteClient(Guid id)
         {
-            var client = _repository.Client.GetClient(id, trackChanges: false);
+            var client = await _repository.Client.GetClientAsync(id, trackChanges: false);
             if (client == null)
             {
                 _logger.LogInfo($"Client with id: {id} doesn't exist in the database.");
                 return NotFound();
             }
             _repository.Client.DeleteClient(client);
-            _repository.Save();
+            await _repository.SaveAsync();
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateClient(Guid id, [FromBody] ClientForUpdateDto client)
+        public async Task<IActionResult> UpdateClient(Guid id, [FromBody] ClientForUpdateDto client)
         {
             if (client == null)
             {
                 _logger.LogError("ClientForUpdateDto object sent from client is null.");
                 return BadRequest("ClientForUpdateDto object is null");
             }
-            var clientEntity = _repository.Client.GetClient(id, trackChanges: true);
+            var clientEntity = await _repository.Client.GetClientAsync(id, trackChanges: true);
             if (clientEntity == null)
             {
                 _logger.LogInfo($"Client with id: {id} doesn't exist in the database.");
                 return NotFound();
             }
             _mapper.Map(client, clientEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             return NoContent();
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PartiallyUpdateClient(Guid id,
+        public async Task<IActionResult> PartiallyUpdateClient(Guid id,
         [FromBody] JsonPatchDocument<ClientForUpdateDto> patchDoc)
         {
             if (patchDoc == null)
@@ -146,7 +146,7 @@ namespace aplabs_nastya.Controllers
                 _logger.LogError("patchDoc object sent from client is null.");
                 return BadRequest("patchDoc object is null");
             }
-            var clientEntity = _repository.Client.GetClient(id, trackChanges: true);
+            var clientEntity = await _repository.Client.GetClientAsync(id, trackChanges: true);
             if (clientEntity == null)
             {
                 _logger.LogInfo($"Client with id: {id} doesn't exist in the database.");
@@ -155,7 +155,7 @@ namespace aplabs_nastya.Controllers
             var clientToPatch = _mapper.Map<ClientForUpdateDto>(clientEntity);
             patchDoc.ApplyTo(clientToPatch);
             _mapper.Map(clientToPatch, clientEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             return NoContent();
         }
     }

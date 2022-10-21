@@ -9,10 +9,10 @@ namespace Contracts
 {
     public interface ICarRepository
     {
-        IEnumerable<Car> GetAllCars(bool trackChanges);
-        Car GetCar(Guid carId, bool trackChanges);
+        Task<IEnumerable<Car>> GetAllCarsAsync(bool trackChanges);
+        Task<Car> GetCarAsync(Guid carId, bool trackChanges);
         void CreateCar(Car car);
-        IEnumerable<Car> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+        Task<IEnumerable<Car>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         void DeleteCar(Car car);
     }
 }
