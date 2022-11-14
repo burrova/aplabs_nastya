@@ -1,5 +1,6 @@
 ﻿namespace aplabs_nastya;
 
+using aplabs_nastya.ActionFilters;
 using aplabs_nastya.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -27,6 +28,9 @@ public class Startup
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddScoped<ValidationFilterAttribute>();
+        services.AddScoped<ValidateCompanyExistsAttribute>();
+        services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
         services.AddAutoMapper(typeof(Startup));
         services.AddControllers(config => {
             config.RespectBrowserAcceptHeader = true;
@@ -37,7 +41,8 @@ public class Startup
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
-        });
+        }
+        );
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
