@@ -10,6 +10,7 @@ namespace aplabs_nastya.Controllers
 {
     [Route("api/{v:apiversion}/companies/{companyId}/employees")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v2")]
     public class EmployeesV2Controller : ControllerBase
     {
         private readonly IRepositoryManager _repository;

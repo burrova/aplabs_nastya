@@ -11,6 +11,7 @@ namespace aplabs_nastya.Controllers
 {
     [Route("api/cars")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class CarController : ControllerBase
     {
         private readonly IRepositoryManager _repository;

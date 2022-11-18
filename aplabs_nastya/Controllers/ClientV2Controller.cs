@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace aplabs_nastya.Controllers
 {
     [Route("api/{v:apiversion}/clients")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v2")]
     public class ClientV2Controller : ControllerBase
     {
         private readonly IRepositoryManager _repository;

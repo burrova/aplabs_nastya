@@ -16,6 +16,7 @@ namespace aplabs_nastya.Controllers
     //auth
     [Route("api/companies")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class CompaniesController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
@@ -60,7 +61,18 @@ namespace aplabs_nastya.Controllers
             }
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Создает вновь созданную компанию
+        /// </summary>
+        /// <param name="company"></param>.
+        /// <returns>Вновь созданная компания</returns>.
+        /// <response code="201"> Возвращает только что созданный элемент</response>.
+        /// <response code="400"> Если элемент равен null</response>.
+        /// <код ответа="422"> Если модель недействительна</ответ>.
+        [HttpPost(Name = "CreateCompany")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(422)]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
         {
             if (company == null)

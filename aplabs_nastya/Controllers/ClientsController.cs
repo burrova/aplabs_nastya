@@ -11,6 +11,7 @@ namespace aplabs_nastya.Controllers
 {
     [Route("api/clients")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class ClientController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
