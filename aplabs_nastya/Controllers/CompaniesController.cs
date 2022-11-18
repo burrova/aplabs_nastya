@@ -13,6 +13,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace aplabs_nastya.Controllers
 {
+    //auth
     [Route("api/companies")]
     [ApiController]
     public class CompaniesController : ControllerBase
