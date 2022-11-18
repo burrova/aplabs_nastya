@@ -21,9 +21,10 @@ namespace aplabs_nastya
             CreateMap<CarForCreationDto, Car>();
             CreateMap<EmployeeForCreationDto, Employee>();
             CreateMap<EmployeeForUpdateDto, Employee>().ReverseMap();
-            CreateMap<CompanyForUpdateDto, Company>().ReverseMap(); ;
-            CreateMap<ClientForUpdateDto, Client>().ReverseMap(); ;
-            CreateMap<CarForUpdateDto, Car>().ReverseMap(); ;
+            CreateMap<CompanyForUpdateDto, Company>().ReverseMap();
+            CreateMap<ClientForUpdateDto, Client>().ReverseMap();
+            CreateMap<CarForUpdateDto, Car>().ReverseMap();
+            CreateMap<UserForRegistrationDto, User>();
         }
     }
 }
