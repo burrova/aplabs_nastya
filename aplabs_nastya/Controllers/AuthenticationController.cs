@@ -28,6 +28,9 @@ namespace aplabs_nastya.Controllers
 
         }
 
+        /// <summary>
+        /// Регистрация
+        /// </summary>
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto
@@ -48,6 +51,9 @@ namespace aplabs_nastya.Controllers
             return StatusCode(201);
         }
 
+        /// <summary>
+        /// Авторизация
+        /// </summary>
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto

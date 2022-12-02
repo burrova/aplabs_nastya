@@ -24,6 +24,11 @@ namespace aplabs_nastya.Controllers
             _logger = logger;
             _mapper = mapper;
         }
+
+        /// <summary>
+        /// Получает список всех клиентов
+        /// </summary>
+        /// <returns>Список клиентов</returns>.
         [HttpGet]
         public async Task<IActionResult> GetClients()
         {
@@ -31,6 +36,11 @@ namespace aplabs_nastya.Controllers
             var clientsDto = _mapper.Map<IEnumerable<ClientDto>>(clients);
             return Ok(clientsDto);
         }
+
+        /// <summary>
+        /// Получает клиента по ID
+        /// </summary>
+        /// <returns>Клиент</returns>.
         [HttpGet("{id}", Name = "ClientById")]
         public async Task<IActionResult> GetClientAsync(Guid id)
         {
@@ -47,6 +57,14 @@ namespace aplabs_nastya.Controllers
             }
         }
 
+        /// <summary>
+        /// Создает вновь созданную книгу
+        /// </summary>
+        /// <param name="client"></param>.
+        /// <returns>Вновь созданная книга</returns>.
+        /// <response code="201"> Возвращает только что созданный элемент</response>.
+        /// <response code="400"> Если элемент равен null</response>.
+        /// <responce code="422"> Если модель недействительна</responce>.
         [HttpPost]
         public async Task<IActionResult> CreateClient([FromBody] ClientForCreationDto client)
         {
@@ -63,6 +81,10 @@ namespace aplabs_nastya.Controllers
             clientToReturn);
         }
 
+        /// <summary>
+        /// Получает коллекцию клиентов
+        /// </summary>
+        /// <returns>Список клиентов</returns>.
         [HttpGet("collection/({ids})", Name = "ClientCollection")]
         public async Task<IActionResult> GetClientCollection([ModelBinder(BinderType =
         typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
@@ -83,6 +105,10 @@ namespace aplabs_nastya.Controllers
             return Ok(clientsToReturn);
         }
 
+        /// <summary>
+        /// Создает коллекцию клиентов
+        /// </summary>
+        /// <returns>Вновь созданная коллекция клиентов</returns>.
         [HttpPost("collection")]
         public async Task<IActionResult> CreateClientCollection([FromBody]
         IEnumerable<ClientForCreationDto> clientCollection)
@@ -105,6 +131,9 @@ namespace aplabs_nastya.Controllers
             clientCollectionToReturn);
         }
 
+        /// <summary>
+        /// Удаляет клиента
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClient(Guid id)
         {
@@ -119,6 +148,10 @@ namespace aplabs_nastya.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Изменяет клиента (стирая старые свойства)
+        /// </summary>
+        /// <returns>Измененный клиент</returns>.
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClient(Guid id, [FromBody] ClientForUpdateDto client)
         {
@@ -138,6 +171,10 @@ namespace aplabs_nastya.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Изменяет клиента (сохраняя старые свойства)
+        /// </summary>
+        /// <returns>Измененный клиент</returns>.
         [HttpPatch("{id}")]
         public async Task<IActionResult> PartiallyUpdateClient(Guid id,
         [FromBody] JsonPatchDocument<ClientForUpdateDto> patchDoc)

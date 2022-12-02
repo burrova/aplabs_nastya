@@ -24,6 +24,11 @@ namespace aplabs_nastya.Controllers
             _logger = logger;
             _mapper = mapper;
         }
+
+        /// <summary>
+        /// Получает список всех машин
+        /// </summary>
+        /// <returns>Список машин</returns>.
         [HttpGet]
         public async Task<IActionResult> GetCars()
         {
@@ -32,6 +37,10 @@ namespace aplabs_nastya.Controllers
             return Ok(carsDto);
         }
 
+        /// <summary>
+        /// Получает машину по ID
+        /// </summary>
+        /// <returns>Машина</returns>.
         [HttpGet("{id}", Name = "CarById")]
         public async Task<IActionResult> GetCar(Guid id)
         {
@@ -48,6 +57,14 @@ namespace aplabs_nastya.Controllers
             }
         }
 
+        /// <summary>
+        /// Создает вновь созданную машину
+        /// </summary>
+        /// <param name="car"></param>.
+        /// <returns>Вновь созданная машина</returns>.
+        /// <response code="201"> Возвращает только что созданный элемент</response>.
+        /// <response code="400"> Если элемент равен null</response>.
+        /// <responce code="422"> Если модель недействительна</responce>.
         [HttpPost]
         public async Task<IActionResult> CreateCar([FromBody] CarForCreationDto car)
         {
@@ -64,6 +81,10 @@ namespace aplabs_nastya.Controllers
             carToReturn);
         }
 
+        /// <summary>
+        /// Получает коллекцию машин
+        /// </summary>
+        /// <returns>Список машин</returns>.
         [HttpGet("collection/({ids})", Name = "CarCollection")]
         public async Task<IActionResult> GetCarCollection([ModelBinder(BinderType =
         typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
@@ -84,6 +105,10 @@ namespace aplabs_nastya.Controllers
             return Ok(carsToReturn);
         }
 
+        /// <summary>
+        /// Создает коллекцию машин
+        /// </summary>
+        /// <returns>Вновь созданная коллекция машин</returns>.
         [HttpPost("collection")]
         public async Task<IActionResult> CreateCarCollection([FromBody]
         IEnumerable<CarForCreationDto> carCollection)
@@ -106,6 +131,9 @@ namespace aplabs_nastya.Controllers
             carCollectionToReturn);
         }
 
+        /// <summary>
+        /// Удаляет машину
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClient(Guid id)
         {
@@ -120,6 +148,10 @@ namespace aplabs_nastya.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Изменяет машину (стирая старые свойства)
+        /// </summary>
+        /// <returns>Измененная машина</returns>.
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCar(Guid id, [FromBody] CarForUpdateDto car)
         {
@@ -139,6 +171,10 @@ namespace aplabs_nastya.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Изменяет машину (сохраняя старые свойства)
+        /// </summary>
+        /// <returns>Измененная машина</returns>.
         [HttpPatch("{id}")]
         public async Task<IActionResult> PartiallyUpdateCar(Guid id,
         [FromBody] JsonPatchDocument<CarForUpdateDto> patchDoc)
