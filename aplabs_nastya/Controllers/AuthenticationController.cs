@@ -10,6 +10,7 @@ using System.Xml.Linq;
 
 namespace aplabs_nastya.Controllers
 {
+    //Авторизация
     [Route("api/authentication")]
     [ApiController]
     public class AuthenticationController : ControllerBase
