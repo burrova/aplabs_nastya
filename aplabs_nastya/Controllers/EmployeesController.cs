@@ -4,6 +4,7 @@ using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Entities.RequestFeatures;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,8 @@ using Newtonsoft.Json;
 namespace aplabs_nastya.Controllers
 {
     [Route("api/companies/{companyId}/employees")]
-    [ApiController]
+    [ApiController, Authorize(Roles = "Manager")]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class EmployeesController : ControllerBase
     {
         private readonly IRepositoryManager _repository;

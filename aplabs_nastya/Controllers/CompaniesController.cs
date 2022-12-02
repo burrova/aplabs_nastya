@@ -15,7 +15,8 @@ namespace aplabs_nastya.Controllers
 {
     //auth
     [Route("api/companies")]
-    [ApiController]
+    [ApiController , Authorize(Roles = "Manager")]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class CompaniesController : ControllerBase
     {
         private readonly IRepositoryManager _repository;

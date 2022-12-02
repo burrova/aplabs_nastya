@@ -3,6 +3,7 @@ using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace aplabs_nastya.Controllers
 {
     [Route("api/clients")]
-    [ApiController]
+    [ApiController, Authorize(Roles = "Administrator")]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class ClientController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
